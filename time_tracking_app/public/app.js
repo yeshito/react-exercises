@@ -33,6 +33,21 @@ const EditableTimerList = React.createClass({
     )
   },
 });
+const ToggleableTimerForm = React.createClass({
+  render: function () {
+    if (this.props.isOpen) {
+      return (
+        <TimerForm />
+      );
+    } else {
+      return (
+        <div className='ui basic content center aligned segment'>
+          <button className='ui basic button icon'><i className='plus icon'></i></button>
+        </div>
+      )
+    }
+  },
+});
 const EditableTimer = React.createClass({
   render: function () {
     if (this.props.editFormOpen) {
@@ -54,21 +69,6 @@ const EditableTimer = React.createClass({
     };
   },
 });
-const ToggleableTimerForm = React.createClass({
-  render: function () {
-    if (this.props.isOpen) {
-      return (
-        <TimerForm />
-      );
-    } else {
-      return (
-        <div className='ui basic content center aligned segment'>
-          <button className='ui basic button icon'><i className='plus icon'></i></button>
-        </div>
-      )
-    }
-  },
-});
 const TimerForm = React.createClass({
   render: function () {
     const submitText = this.props.title ? 'Update' : 'Create';
@@ -78,7 +78,7 @@ const TimerForm = React.createClass({
             <div className='ui form'>
               <div className='field'>
                 <label>Title</label>
-                <input type='text' defaultValue={this.props.value} />
+                <input type='text' defaultValue={this.props.title} />
                 <div className='field'>
                   <label>Project</label>
                   <input type='text' defaultValue={this.props.project} />
@@ -124,7 +124,7 @@ const Timer = React.createClass({
       </div>
     )
   }
-})
+});
 ReactDOM.render(
   <TimersDashboard />,
   document.getElementById('content')
