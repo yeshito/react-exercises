@@ -101,7 +101,7 @@ const ToggleableTimerForm = React.createClass({
   handleFormClose: function () {
     this.setState({ isOpen: false });
   },
-  handleFormSubmit: function () {
+  handleFormSubmit: function (timer) {
     this.props.onFormSubmit(timer);
     this.setState({ isOpen: false })
   },
@@ -131,7 +131,7 @@ const TimerForm = React.createClass({
     this.props.onFormSubmit({
       id: this.props.id,
       title: this.refs.title.value,
-      project: this.refs.project.value
+      project: this.refs.project.value,
     });
   },
   render: function () {
@@ -148,7 +148,7 @@ const TimerForm = React.createClass({
                   <input type='text' ref='project' defaultValue={this.props.project} />
                 </div>
                 <div className='ui two bottom attached buttons'>
-                  <button className='ui basic blue button' onClick={this.handleSubmit}>{this.submitText}</button>
+                  <button className='ui basic blue button' onClick={this.handleSubmit}>{submitText}</button>
                   <button className='ui basic red button' onClick={this.props.onFormClose}>Cancel</button>
                 </div>
               </div>
