@@ -46,11 +46,19 @@ const TimersDashboard = React.createClass({
       })
     })
   },
+  handleDeleteClick: function (timerId) {
+    this.deleteTimer(timerId)
+  },
+  deleteTimer: function (timerId) {
+    this.setState({
+      timers: this.state.timers.filter( t => t.id !== timerId)
+    });
+  },
   render: function () {
     return (
       <div className='ui three column centered grid'>
         <div className='column'>
-          <EditableTimerList timers={this.state.timers} onFormSubmit={this.handleEditFormSubmit}/>
+          <EditableTimerList timers={this.state.timers} onFormSubmit={this.handleEditFormSubmit} onDeleteClick={this.handleDeleteClick}/>
           <ToggleableTimerForm
             onFormSubmit={this.handleCreateFormSubmit}
           />
@@ -71,6 +79,7 @@ const EditableTimerList = React.createClass({
           elapsed={timer.elapsed}
           runningSince={timer.runningSince}
           onFormSubmit={this.props.onFormSubmit}
+          handleDeleteClick={this.props.onDeleteClick}
         />
       ));
       return (
@@ -88,6 +97,9 @@ const EditableTimer = React.createClass({
   },
   handleEditClick: function () {
     this.openForm();
+  },
+  handleDeleteClick: function () {
+    this.props.handleDeleteClick(this.props.id);
   },
   handleFormClose: function () {
     this.closeForm();
@@ -122,6 +134,7 @@ const EditableTimer = React.createClass({
           elapsed={this.props.elapsed}
           runningSince={this.props.runningSince}
           onEditClick={this.handleEditClick}
+          onDeleteClick={this.handleDeleteClick}
         />
       )
     };
@@ -215,7 +228,7 @@ const Timer = React.createClass({
             <span className='right floated edit icon' onClick={this.props.onEditClick}>
               <i className='edit icon'></i>
             </span>
-            <span className='right floated trash icon'>
+            <span className='right floated trash icon' onClick={this.props.onDeleteClick}>
               <i className='trash icon'></i>
             </span>
           </div>
