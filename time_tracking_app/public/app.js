@@ -276,7 +276,6 @@ const Timer = React.createClass({
   handleStopClick: function () {
     this.props.onStopClick(this.props.id);
   },
-
   onMouseEnter: function () {
     this.showButtons();
   },
@@ -295,8 +294,9 @@ const Timer = React.createClass({
   },
   render: function () {
     const elapsedString = helpers.renderElapsedString(this.props.elapsed, this.props.runningSince);
-    return (
-      <div className='ui centered card'>
+    if (this.state.showButtons) {
+      return (
+      <div className='ui centered card' onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <div className='content'>
           <div className='header'>
             {this.props.title}
@@ -310,7 +310,7 @@ const Timer = React.createClass({
           <EditDeleteButtons
           onEditClick={this.props.onEditClick}
           onDeleteClick={this.props.onDeleteClick}
-          showButtons={this.state.showButtons}/>
+          />
         </div>
         <TimerActionButton
           timerIsRunning={!!this.props.runningSince}
@@ -318,12 +318,33 @@ const Timer = React.createClass({
           onStopClick={this.handleStopClick}
         />
       </div>
-    )
+      )
+    } else {
+      return (
+        <div className='ui centered card' onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <div className='content'>
+            <div className='header'>
+              {this.props.title}
+            </div>
+            <div className='meta'>
+              {this.props.project}
+            </div>
+            <div className='center aligned description'>
+              <h2>{elapsedString}</h2>
+            </div>
+          </div>
+          <TimerActionButton
+            timerIsRunning={!!this.props.runningSince}
+            onStartClick={this.handleStartClick}
+            onStopClick={this.handleStopClick}
+          />
+        </div>
+      )
+    }
   }
 });
 const EditDeleteButtons = React.createClass({
   render: function () {
-    if (this.props.showButtons) {
       return (
         <div className='extra content'>
           <span className='right floated edit icon' onClick={this.props.onEditClick}>
@@ -334,9 +355,8 @@ const EditDeleteButtons = React.createClass({
           </span>
         </div>
       )
-    }
   }
-})
+});
 const TimerActionButton = React.createClass({
   render: function () {
     if (this.props.timerIsRunning) {
