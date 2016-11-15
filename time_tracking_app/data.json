@@ -2,9 +2,9 @@
     {
         "title": "Clear paper jam",
         "project": "Office Chores",
-        "elapsed": 1285900,
+        "elapsed": 22774769729,
         "id": "a73c1d19-f32d-4aff-b470-cea4e792406a",
-        "runningSince": 1456468632194
+        "runningSince": null
     },
     {
         "title": "Ponder origins of universe",
@@ -14,17 +14,10 @@
         "runningSince": null
     },
     {
-        "title": "Poo in the bathroom",
-        "project": "Personal Tasks",
-        "id": "a8c32cdf-7700-4210-84ac-9239e6c650ea",
-        "elapsed": 19085,
-        "runningSince": null
-    },
-    {
-        "title": "Pee in the bathroom",
-        "project": "Personal tasks",
-        "id": "cac286fa-a7c6-48ab-8dd3-7dd72d60f43f",
+        "title": "Wine Tasting",
+        "project": "Wine",
+        "id": "691e8287-c085-4787-8d66-c47bb372d130",
         "elapsed": 0,
-        "runningSince": null
+        "runningSince": 1479242164361
     }
 ]
