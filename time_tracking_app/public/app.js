@@ -24,7 +24,7 @@ const TimersDashboard = React.createClass({
       timers: this.state.timers.concat(t),
     });
 
-    client.createTimer(t);
+    client.createTimer(t, );
   },
   handleEditFormSubmit: function (attrs) {
     this.updateTimer(attrs);
