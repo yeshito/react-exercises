@@ -24,7 +24,15 @@ const TimersDashboard = React.createClass({
       timers: this.state.timers.concat(t),
     });
 
-    client.createTimer(t, );
+    client.createTimer(t, handleServerError);
+  },
+  handleServerError: function (id) {
+    this.showError(id);
+  },
+  showError: function (id) {
+    this.setState({
+      timers
+    })
   },
   handleEditFormSubmit: function (attrs) {
     this.updateTimer(attrs);
@@ -217,6 +225,9 @@ const ToggleableTimerForm = React.createClass({
           onFormSubmit={this.handleFormSubmit}
           onFormClose={this.handleFormClose}
         />
+        <ErrorMessage
+          error={this.props.error}
+        />
       );
     } else {
       return (
@@ -227,10 +238,28 @@ const ToggleableTimerForm = React.createClass({
             <i className='plus icon'></i>
           </button>
         </div>
+        <ErrorMessage
+          error={this.props.error}
+        />
       )
     }
   },
 });
+
+const ErrorMessage = React.createClass({
+  render: function () {
+    if (this.props.error) {
+      return (
+        <div class="ui segment">
+          <p>There was an error creating your timer. Please try again</p>
+        </div>
+      )
+    } else {
+      return null;
+    }
+  }
+})
+
 const TimerForm = React.createClass({
   handleSubmit: function () {
     this.props.onFormSubmit({
