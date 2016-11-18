@@ -2,7 +2,8 @@
 const TimersDashboard = React.createClass({
   getInitialState: function () {
     return {
-      timers: []
+      timers: [],
+      error: false
     };
   },
   componentDidMount: function () {
@@ -24,15 +25,16 @@ const TimersDashboard = React.createClass({
       timers: this.state.timers.concat(t),
     });
 
-    client.createTimer(t, handleServerError);
+    client.createTimer(t, this.onError);
   },
-  handleServerError: function (id) {
-    this.showError(id);
+  onError: function () {
+    this.showError();
   },
-  showError: function (id) {
-    this.setState({
-      timers: []
-    })
+  showError: function () {
+    this.setState({ error: true })
+  },
+  handleErrorClick: function () {
+    this.setState({ error: false })
   },
   handleEditFormSubmit: function (attrs) {
     this.updateTimer(attrs);
@@ -51,7 +53,7 @@ const TimersDashboard = React.createClass({
       })
     })
 
-    client.updateTimer(attrs);
+    client.updateTimer(attrs, this.onError);
   },
   handleDeleteClick: function (timerId) {
     this.deleteTimer(timerId)
@@ -61,7 +63,7 @@ const TimersDashboard = React.createClass({
       timers: this.state.timers.filter( t => t.id !== timerId)
     });
 
-    client.deleteTimer({ id: timerId })
+    client.deleteTimer({ id: timerId }, this.onError)
   },
   handleStartClick: function (timerId) {
     this.startTimer(timerId);
@@ -84,7 +86,7 @@ const TimersDashboard = React.createClass({
       })
     })
 
-    client.startTimer({ id: timerId, start: now });
+    client.startTimer({ id: timerId, start: now }, this.onError);
   },
   stopTimer: function (timerId) {
     const now = Date.now();
@@ -104,12 +106,16 @@ const TimersDashboard = React.createClass({
       })
     })
 
-    client.stopTimer({ id: timerId, stop: now });
+    client.stopTimer({ id: timerId, stop: now }, this.onError);
   },
   render: function () {
     return (
       <div className='ui three column centered grid'>
         <div className='column'>
+          <ErrorMessage
+            error={this.state.error}
+            onErrorClick={this.handleErrorClick}
+          />
           <EditableTimerList
             timers={this.state.timers}
             onFormSubmit={this.handleEditFormSubmit}
@@ -125,6 +131,23 @@ const TimersDashboard = React.createClass({
     );
   },
 });
+
+const ErrorMessage = React.createClass({
+  render: function () {
+    if (this.props.error) {
+      return (
+        <div className="ui segment center aligned">
+          <button className="ui icon button" onClick={this.props.onErrorClick}>
+            <i className="remove icon"></i>
+          </button>
+          <p>There was an error. Please try again</p>
+        </div>
+      )
+    } else {
+      return null;
+    }
+  }
+})
 
 const EditableTimerList = React.createClass({
   render: function () {
@@ -153,7 +176,6 @@ const EditableTimer = React.createClass({
   getInitialState: function () {
     return {
       editFormOpen: false,
-      error: false
     };
   },
   handleEditClick: function () {
@@ -207,7 +229,6 @@ const ToggleableTimerForm = React.createClass({
   getInitialState: function () {
     return {
       isOpen: false,
-      error: false
     };
   },
   handleFormOpen: function () {
@@ -220,9 +241,6 @@ const ToggleableTimerForm = React.createClass({
     this.props.onFormSubmit(timer);
     this.setState({ isOpen: false })
   },
-  handleErrorClose: function () {
-    this.setState({ error: false });
-  },
   render: function () {
     if (this.state.isOpen) {
       return (
@@ -230,9 +248,6 @@ const ToggleableTimerForm = React.createClass({
           <TimerForm
             onFormSubmit={this.handleFormSubmit}
             onFormClose={this.handleFormClose}
-          />
-          <ErrorMessage
-            error={this.state.error}
           />
         </div>
       );
@@ -244,40 +259,11 @@ const ToggleableTimerForm = React.createClass({
           >
             <i className='plus icon'></i>
           </button>
-          <ErrorMessage
-            error={this.state.error}
-            onErrorClick={this.handleErrorClose}
-          />
         </div>
       )
     }
   },
 });
-
-const ErrorMessage = React.createClass({
-  render: function () {
-    if (this.props.error) {
-      return (
-        <div className="ui segment">
-          <button className="ui icon button" onClick={this.props.onErrorClick}>
-            <i class="remove icon"></i>
-          </button>
-          <p>There was an error. Please try again</p>
-        </div>
-      )
-    } else {
-      // return null;
-      return (
-        <div className="ui segment">
-          <p>There was an error. Please try again</p>
-          <button className="ui icon button">
-            <i className="remove icon"></i>
-          </button>
-        </div>
-      )
-    }
-  }
-})
 
 const TimerForm = React.createClass({
   handleSubmit: function () {
