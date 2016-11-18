@@ -1,14 +1,15 @@
 /* eslint-disable no-console */
 /* eslint-disable no-undef */
 window.client = (function () {
-  function getTimers(success) {
+  function getTimers(success, onError) {
     return fetch('/api/timers', {
       headers: {
         Accept: 'application/json',
       },
     }).then(checkStatus)
       .then(parseJSON)
-      .then(success);
+      .then(success)
+      .catch(onError);
   }
 
   function createTimer(data, onError) {
@@ -23,7 +24,7 @@ window.client = (function () {
       .catch(onError);
   }
 
-  function updateTimer(data) {
+  function updateTimer(data, onError) {
     return fetch('/api/timers', {
       method: 'put',
       body: JSON.stringify(data),
@@ -31,10 +32,11 @@ window.client = (function () {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-    }).then(checkStatus);
+    }).then(checkStatus)
+      .catch(onError);
   }
 
-  function deleteTimer(data) {
+  function deleteTimer(data, onError) {
     return fetch('/api/timers', {
       method: 'delete',
       body: JSON.stringify(data),
@@ -42,10 +44,11 @@ window.client = (function () {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-    }).then(checkStatus);
+    }).then(checkStatus)
+      .catch(onError);
   }
 
-  function startTimer(data) {
+  function startTimer(data, onError) {
     return fetch('/api/timers/start', {
       method: 'post',
       body: JSON.stringify(data),
@@ -53,10 +56,11 @@ window.client = (function () {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-    }).then(checkStatus);
+    }).then(checkStatus)
+      .catch(onError);
   }
 
-  function stopTimer(data) {
+  function stopTimer(data, onError) {
     return fetch('/api/timers/stop', {
       method: 'post',
       body: JSON.stringify(data),
@@ -64,7 +68,8 @@ window.client = (function () {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-    }).then(checkStatus);
+    }).then(checkStatus)
+      .catch(onError);
   }
 
   function checkStatus(response) {

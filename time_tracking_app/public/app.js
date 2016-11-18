@@ -31,7 +31,7 @@ const TimersDashboard = React.createClass({
   },
   showError: function (id) {
     this.setState({
-      timers
+      timers: []
     })
   },
   handleEditFormSubmit: function (attrs) {
@@ -152,7 +152,8 @@ const EditableTimerList = React.createClass({
 const EditableTimer = React.createClass({
   getInitialState: function () {
     return {
-      editFormOpen: false
+      editFormOpen: false,
+      error: false
     };
   },
   handleEditClick: function () {
@@ -206,6 +207,7 @@ const ToggleableTimerForm = React.createClass({
   getInitialState: function () {
     return {
       isOpen: false,
+      error: false
     };
   },
   handleFormOpen: function () {
@@ -218,16 +220,21 @@ const ToggleableTimerForm = React.createClass({
     this.props.onFormSubmit(timer);
     this.setState({ isOpen: false })
   },
+  handleErrorClose: function () {
+    this.setState({ error: false });
+  },
   render: function () {
     if (this.state.isOpen) {
       return (
-        <TimerForm
-          onFormSubmit={this.handleFormSubmit}
-          onFormClose={this.handleFormClose}
-        />
-        <ErrorMessage
-          error={this.props.error}
-        />
+        <div>
+          <TimerForm
+            onFormSubmit={this.handleFormSubmit}
+            onFormClose={this.handleFormClose}
+          />
+          <ErrorMessage
+            error={this.state.error}
+          />
+        </div>
       );
     } else {
       return (
@@ -237,10 +244,11 @@ const ToggleableTimerForm = React.createClass({
           >
             <i className='plus icon'></i>
           </button>
+          <ErrorMessage
+            error={this.state.error}
+            onErrorClick={this.handleErrorClose}
+          />
         </div>
-        <ErrorMessage
-          error={this.props.error}
-        />
       )
     }
   },
@@ -250,12 +258,23 @@ const ErrorMessage = React.createClass({
   render: function () {
     if (this.props.error) {
       return (
-        <div class="ui segment">
-          <p>There was an error creating your timer. Please try again</p>
+        <div className="ui segment">
+          <button className="ui icon button" onClick={this.props.onErrorClick}>
+            <i class="remove icon"></i>
+          </button>
+          <p>There was an error. Please try again</p>
         </div>
       )
     } else {
-      return null;
+      // return null;
+      return (
+        <div className="ui segment">
+          <p>There was an error. Please try again</p>
+          <button className="ui icon button">
+            <i className="remove icon"></i>
+          </button>
+        </div>
+      )
     }
   }
 })
